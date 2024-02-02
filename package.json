@@ -1,0 +1,11 @@
+{
+  "name": "chibivue",
+  "version": "0.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "cd examples/playground && pnpm i && pnpm run dev"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.11"
+  }
+}
