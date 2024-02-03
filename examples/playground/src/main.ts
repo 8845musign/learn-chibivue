@@ -1,20 +1,36 @@
 import { createApp, h, reactive } from "chibivue";
 
 const MyComponent = {
-  props: { message: { type: String } },
+  props: { someMessage: { type: String } },
 
-  setup(props: { message: string }) {
-    return () => h("div", { id: "my-app" }, [`message: ${props.message}`]);
+  setup(props: any, { emit }: any) {
+    return () =>
+      h("div", {}, [
+        h("p", {}, [`someMessage: ${props.someMessage}`]),
+        h("button", { onClick: () => emit("click:change-message") }, [
+          "change message",
+        ]),
+      ]);
   },
 };
 
 const app = createApp({
   setup() {
     const state = reactive({ message: "hello" });
+    const changeMessage = () => {
+      state.message += "!";
+    };
 
     return () =>
       h("div", { id: "my-app" }, [
-        h(MyComponent, { message: state.message }, []),
+        h(
+          MyComponent,
+          {
+            "some-message": state.message,
+            "onClick:change-message": changeMessage,
+          },
+          []
+        ),
       ]);
   },
 });

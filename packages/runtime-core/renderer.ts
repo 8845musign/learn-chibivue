@@ -5,7 +5,7 @@ import {
   InternalRenderFunction,
   createComponentInstance,
 } from "./component";
-import { initProps } from "./componentProps";
+import { initProps, updateProps } from "./componentProps";
 import { Text, VNode, createVNode, normalizeVNode } from "./vnode";
 
 export type RootRenderFunction<HostElement = RendererElement> = (
@@ -156,9 +156,9 @@ export function createRenderer(options: RendererOptions) {
 
     const component = initialVNode.type as Component;
     if (component.setup) {
-      instance.render = component.setup(
-        instance.props
-      ) as InternalRenderFunction;
+      instance.render = component.setup(instance.props, {
+        emit: instance.emit,
+      }) as InternalRenderFunction;
     }
 
     setupRenderEffect(instance, initialVNode, container);
@@ -184,6 +184,7 @@ export function createRenderer(options: RendererOptions) {
           next.component = instance;
           instance.vnode = next;
           instance.next = null;
+          updateProps(instance, next.props);
         } else {
           next = vnode;
         }

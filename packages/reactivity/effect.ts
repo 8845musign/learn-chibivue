@@ -11,11 +11,9 @@ export class ReactiveEffect<T = any> {
 
   run() {
     let parent: ReactiveEffect | undefined = activeEffect;
-    console.info("effect start");
     activeEffect = this;
     const res = this.fn();
     activeEffect = parent;
-    console.info("effect end");
     return res;
   }
 }
