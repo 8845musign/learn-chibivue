@@ -7,6 +7,7 @@ import {
 } from "./component";
 import { initProps, updateProps } from "./componentProps";
 import { Text, VNode, createVNode, normalizeVNode } from "./vnode";
+import { setupComponent } from "../runtime-core";
 
 export type RootRenderFunction<HostElement = RendererElement> = (
   vnode: Component,
@@ -151,16 +152,7 @@ export function createRenderer(options: RendererOptions) {
     const instance: ComponentInternalInstance = (initialVNode.component =
       createComponentInstance(initialVNode));
 
-    const { props } = instance.vnode;
-    initProps(instance, props);
-
-    const component = initialVNode.type as Component;
-    if (component.setup) {
-      instance.render = component.setup(instance.props, {
-        emit: instance.emit,
-      }) as InternalRenderFunction;
-    }
-
+    setupComponent(instance);
     setupRenderEffect(instance, initialVNode, container);
   };
 
